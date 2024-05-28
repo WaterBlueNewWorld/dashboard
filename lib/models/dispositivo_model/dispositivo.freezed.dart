@@ -26,6 +26,7 @@ mixin _$Dispositivo {
   bool? get enUso => throw _privateConstructorUsedError;
   String? get estatus => throw _privateConstructorUsedError;
   String? get observaciones => throw _privateConstructorUsedError;
+  String? get ip => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +46,8 @@ abstract class $DispositivoCopyWith<$Res> {
       String? codigo,
       bool? enUso,
       String? estatus,
-      String? observaciones});
+      String? observaciones,
+      String? ip});
 }
 
 /// @nodoc
@@ -67,6 +69,7 @@ class _$DispositivoCopyWithImpl<$Res, $Val extends Dispositivo>
     Object? enUso = freezed,
     Object? estatus = freezed,
     Object? observaciones = freezed,
+    Object? ip = freezed,
   }) {
     return _then(_value.copyWith(
       nombre: freezed == nombre
@@ -93,6 +96,10 @@ class _$DispositivoCopyWithImpl<$Res, $Val extends Dispositivo>
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
               as String?,
+      ip: freezed == ip
+          ? _value.ip
+          : ip // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -111,7 +118,8 @@ abstract class _$$DispositivoImplCopyWith<$Res>
       String? codigo,
       bool? enUso,
       String? estatus,
-      String? observaciones});
+      String? observaciones,
+      String? ip});
 }
 
 /// @nodoc
@@ -131,6 +139,7 @@ class __$$DispositivoImplCopyWithImpl<$Res>
     Object? enUso = freezed,
     Object? estatus = freezed,
     Object? observaciones = freezed,
+    Object? ip = freezed,
   }) {
     return _then(_$DispositivoImpl(
       nombre: freezed == nombre
@@ -157,6 +166,10 @@ class __$$DispositivoImplCopyWithImpl<$Res>
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
               as String?,
+      ip: freezed == ip
+          ? _value.ip
+          : ip // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -170,7 +183,8 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
       required this.codigo,
       required this.enUso,
       required this.estatus,
-      required this.observaciones});
+      required this.observaciones,
+      required this.ip});
 
   factory _$DispositivoImpl.fromJson(Map<String, dynamic> json) =>
       _$$DispositivoImplFromJson(json);
@@ -187,10 +201,12 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
   final String? estatus;
   @override
   final String? observaciones;
+  @override
+  final String? ip;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Dispositivo(nombre: $nombre, etiqueta: $etiqueta, codigo: $codigo, enUso: $enUso, estatus: $estatus, observaciones: $observaciones)';
+    return 'Dispositivo(nombre: $nombre, etiqueta: $etiqueta, codigo: $codigo, enUso: $enUso, estatus: $estatus, observaciones: $observaciones, ip: $ip)';
   }
 
   @override
@@ -203,7 +219,8 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
       ..add(DiagnosticsProperty('codigo', codigo))
       ..add(DiagnosticsProperty('enUso', enUso))
       ..add(DiagnosticsProperty('estatus', estatus))
-      ..add(DiagnosticsProperty('observaciones', observaciones));
+      ..add(DiagnosticsProperty('observaciones', observaciones))
+      ..add(DiagnosticsProperty('ip', ip));
   }
 
   @override
@@ -218,13 +235,14 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
             (identical(other.enUso, enUso) || other.enUso == enUso) &&
             (identical(other.estatus, estatus) || other.estatus == estatus) &&
             (identical(other.observaciones, observaciones) ||
-                other.observaciones == observaciones));
+                other.observaciones == observaciones) &&
+            (identical(other.ip, ip) || other.ip == ip));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, nombre, etiqueta, codigo, enUso, estatus, observaciones);
+      runtimeType, nombre, etiqueta, codigo, enUso, estatus, observaciones, ip);
 
   @JsonKey(ignore: true)
   @override
@@ -247,7 +265,8 @@ abstract class _Dispositivo implements Dispositivo {
       required final String? codigo,
       required final bool? enUso,
       required final String? estatus,
-      required final String? observaciones}) = _$DispositivoImpl;
+      required final String? observaciones,
+      required final String? ip}) = _$DispositivoImpl;
 
   factory _Dispositivo.fromJson(Map<String, dynamic> json) =
       _$DispositivoImpl.fromJson;
@@ -264,6 +283,8 @@ abstract class _Dispositivo implements Dispositivo {
   String? get estatus;
   @override
   String? get observaciones;
+  @override
+  String? get ip;
   @override
   @JsonKey(ignore: true)
   _$$DispositivoImplCopyWith<_$DispositivoImpl> get copyWith =>

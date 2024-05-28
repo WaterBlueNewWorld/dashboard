@@ -12,6 +12,7 @@ class Dispositivo with _$Dispositivo {
     required bool? enUso,
     required String? estatus,
     required String? observaciones,
+    required String? ip,
   }) = _Dispositivo;
 
   factory Dispositivo.fromJson(Map<String, dynamic> json) => _$DispositivoFromJson(json);
