@@ -19,8 +19,8 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Texto de arriba"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Dashboard"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           AvatarHover(
             widgetKey: llave,

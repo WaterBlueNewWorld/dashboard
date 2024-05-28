@@ -13,6 +13,7 @@ dependencies:
   syncfusion_flutter_datagrid_export: ^25.2.5
   syncfusion_flutter_core: ^25.2.5
   syncfusion_flutter_charts: ^25.2.5
+  faker: ^2.1.0
   avatar_hover:
     git: https://github.com/WaterBlueNewWorld/avatar_hover
   json_annotation: ^4.9.0
