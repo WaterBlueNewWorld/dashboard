@@ -20,12 +20,12 @@ Dispositivo _$DispositivoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Dispositivo {
-  String get nombre => throw _privateConstructorUsedError;
-  String get etiqueta => throw _privateConstructorUsedError;
-  String get codigo => throw _privateConstructorUsedError;
-  bool get enUso => throw _privateConstructorUsedError;
-  String get estatus => throw _privateConstructorUsedError;
-  String get observaciones => throw _privateConstructorUsedError;
+  String? get nombre => throw _privateConstructorUsedError;
+  String? get etiqueta => throw _privateConstructorUsedError;
+  String? get codigo => throw _privateConstructorUsedError;
+  bool? get enUso => throw _privateConstructorUsedError;
+  String? get estatus => throw _privateConstructorUsedError;
+  String? get observaciones => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,12 +40,12 @@ abstract class $DispositivoCopyWith<$Res> {
       _$DispositivoCopyWithImpl<$Res, Dispositivo>;
   @useResult
   $Res call(
-      {String nombre,
-      String etiqueta,
-      String codigo,
-      bool enUso,
-      String estatus,
-      String observaciones});
+      {String? nombre,
+      String? etiqueta,
+      String? codigo,
+      bool? enUso,
+      String? estatus,
+      String? observaciones});
 }
 
 /// @nodoc
@@ -61,38 +61,38 @@ class _$DispositivoCopyWithImpl<$Res, $Val extends Dispositivo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? nombre = null,
-    Object? etiqueta = null,
-    Object? codigo = null,
-    Object? enUso = null,
-    Object? estatus = null,
-    Object? observaciones = null,
+    Object? nombre = freezed,
+    Object? etiqueta = freezed,
+    Object? codigo = freezed,
+    Object? enUso = freezed,
+    Object? estatus = freezed,
+    Object? observaciones = freezed,
   }) {
     return _then(_value.copyWith(
-      nombre: null == nombre
+      nombre: freezed == nombre
           ? _value.nombre
           : nombre // ignore: cast_nullable_to_non_nullable
-              as String,
-      etiqueta: null == etiqueta
+              as String?,
+      etiqueta: freezed == etiqueta
           ? _value.etiqueta
           : etiqueta // ignore: cast_nullable_to_non_nullable
-              as String,
-      codigo: null == codigo
+              as String?,
+      codigo: freezed == codigo
           ? _value.codigo
           : codigo // ignore: cast_nullable_to_non_nullable
-              as String,
-      enUso: null == enUso
+              as String?,
+      enUso: freezed == enUso
           ? _value.enUso
           : enUso // ignore: cast_nullable_to_non_nullable
-              as bool,
-      estatus: null == estatus
+              as bool?,
+      estatus: freezed == estatus
           ? _value.estatus
           : estatus // ignore: cast_nullable_to_non_nullable
-              as String,
-      observaciones: null == observaciones
+              as String?,
+      observaciones: freezed == observaciones
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -106,12 +106,12 @@ abstract class _$$DispositivoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String nombre,
-      String etiqueta,
-      String codigo,
-      bool enUso,
-      String estatus,
-      String observaciones});
+      {String? nombre,
+      String? etiqueta,
+      String? codigo,
+      bool? enUso,
+      String? estatus,
+      String? observaciones});
 }
 
 /// @nodoc
@@ -125,38 +125,38 @@ class __$$DispositivoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? nombre = null,
-    Object? etiqueta = null,
-    Object? codigo = null,
-    Object? enUso = null,
-    Object? estatus = null,
-    Object? observaciones = null,
+    Object? nombre = freezed,
+    Object? etiqueta = freezed,
+    Object? codigo = freezed,
+    Object? enUso = freezed,
+    Object? estatus = freezed,
+    Object? observaciones = freezed,
   }) {
     return _then(_$DispositivoImpl(
-      nombre: null == nombre
+      nombre: freezed == nombre
           ? _value.nombre
           : nombre // ignore: cast_nullable_to_non_nullable
-              as String,
-      etiqueta: null == etiqueta
+              as String?,
+      etiqueta: freezed == etiqueta
           ? _value.etiqueta
           : etiqueta // ignore: cast_nullable_to_non_nullable
-              as String,
-      codigo: null == codigo
+              as String?,
+      codigo: freezed == codigo
           ? _value.codigo
           : codigo // ignore: cast_nullable_to_non_nullable
-              as String,
-      enUso: null == enUso
+              as String?,
+      enUso: freezed == enUso
           ? _value.enUso
           : enUso // ignore: cast_nullable_to_non_nullable
-              as bool,
-      estatus: null == estatus
+              as bool?,
+      estatus: freezed == estatus
           ? _value.estatus
           : estatus // ignore: cast_nullable_to_non_nullable
-              as String,
-      observaciones: null == observaciones
+              as String?,
+      observaciones: freezed == observaciones
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -176,17 +176,17 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
       _$$DispositivoImplFromJson(json);
 
   @override
-  final String nombre;
+  final String? nombre;
   @override
-  final String etiqueta;
+  final String? etiqueta;
   @override
-  final String codigo;
+  final String? codigo;
   @override
-  final bool enUso;
+  final bool? enUso;
   @override
-  final String estatus;
+  final String? estatus;
   @override
-  final String observaciones;
+  final String? observaciones;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -242,28 +242,28 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
 
 abstract class _Dispositivo implements Dispositivo {
   const factory _Dispositivo(
-      {required final String nombre,
-      required final String etiqueta,
-      required final String codigo,
-      required final bool enUso,
-      required final String estatus,
-      required final String observaciones}) = _$DispositivoImpl;
+      {required final String? nombre,
+      required final String? etiqueta,
+      required final String? codigo,
+      required final bool? enUso,
+      required final String? estatus,
+      required final String? observaciones}) = _$DispositivoImpl;
 
   factory _Dispositivo.fromJson(Map<String, dynamic> json) =
       _$DispositivoImpl.fromJson;
 
   @override
-  String get nombre;
+  String? get nombre;
   @override
-  String get etiqueta;
+  String? get etiqueta;
   @override
-  String get codigo;
+  String? get codigo;
   @override
-  bool get enUso;
+  bool? get enUso;
   @override
-  String get estatus;
+  String? get estatus;
   @override
-  String get observaciones;
+  String? get observaciones;
   @override
   @JsonKey(ignore: true)
   _$$DispositivoImplCopyWith<_$DispositivoImpl> get copyWith =>

@@ -8,12 +8,12 @@ part of 'dispositivo.dart';
 
 _$DispositivoImpl _$$DispositivoImplFromJson(Map<String, dynamic> json) =>
     _$DispositivoImpl(
-      nombre: json['nombre'] as String,
-      etiqueta: json['etiqueta'] as String,
-      codigo: json['codigo'] as String,
-      enUso: json['enUso'] as bool,
-      estatus: json['estatus'] as String,
-      observaciones: json['observaciones'] as String,
+      nombre: json['nombre'] as String?,
+      etiqueta: json['etiqueta'] as String?,
+      codigo: json['codigo'] as String?,
+      enUso: json['enUso'] as bool?,
+      estatus: json['estatus'] as String?,
+      observaciones: json['observaciones'] as String?,
     );
 
 Map<String, dynamic> _$$DispositivoImplToJson(_$DispositivoImpl instance) =>

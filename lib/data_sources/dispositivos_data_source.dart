@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class DispositivosDataSource extends DataGridSource {
+  List<DataGridRow> filas = [];
 
   @override
-  // TODO: implement sortedColumns
   List<SortColumnDetails> get sortedColumns => super.sortedColumns;
 
   @override
-  // TODO: implement rows
   List<DataGridRow> get rows => super.rows;
 
   makeRows() {
