@@ -1,8 +1,11 @@
+import 'package:binding_prueba/data_sources/bh_provider.dart';
 import 'package:binding_prueba/routes/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_portal/flutter_portal.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(DemoDashboard());
+  runApp(const DemoDashboard());
 }
 
 class DemoDashboard extends StatelessWidget {
@@ -16,7 +19,14 @@ class DemoDashboard extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Dashboard(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => BDHProvider()),
+        ],
+        builder: (c, f) {
+          return const Portal(child: Dashboard());
+        } ,
+      ),
     );
   }
 }

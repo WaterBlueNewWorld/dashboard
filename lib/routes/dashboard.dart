@@ -1,6 +1,8 @@
 import 'package:avatar_hover/avatar_hover.dart';
+import 'package:binding_prueba/data_sources/bh_provider.dart';
 import 'package:binding_prueba/data_sources/dispositivos_data_source.dart';
 import 'package:binding_prueba/models/sucursal_model/sucursal.dart';
+import 'package:binding_prueba/widgets/barra_herramientas.dart';
 import 'package:binding_prueba/widgets/dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -50,13 +52,12 @@ class StateDashboard extends State<Dashboard> {
         onPressed: () {
           print(dispositivosDataSource.listaDispositivos.length);
           print(dispositivosDataSource.filas.length);
-          dispositivosDataSource.makeRows();
         },
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
         title: const Text("Dashboard"),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 5.0,
         actions: [
           AvatarHover(
             widgetKey: llave,
@@ -77,6 +78,15 @@ class StateDashboard extends State<Dashboard> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 65,),
+              BarraHerramientas<BDHProvider>(
+                actualizarCallback: (v, b){
+                  dispositivosDataSource.makeRows();
+                },
+                busquedaCallback: (v, s) {
+
+                },
+                fechaCallback: (v) {},
+              ),
               SizedBox(
                 width: 200,
                 child: Padding(
@@ -98,157 +108,160 @@ class StateDashboard extends State<Dashboard> {
             children: [
               Expanded(
                 flex: 3,
-                child: Card(
-                  child: SfDataGrid(
-                    rowsPerPage: 30,
-                    controller: controller,
-                    isScrollbarAlwaysShown: true,
-                    highlightRowOnHover: true,
-                    headerGridLinesVisibility: GridLinesVisibility.none,
-                    source: dispositivosDataSource,
-                    columnWidthMode: ColumnWidthMode.fill,
-                    columnResizeMode: ColumnResizeMode.onResize,
-                    selectionMode: SelectionMode.none,
-                    allowColumnsResizing: true,
-                    onCellTap: (DataGridCellTapDetails v) {
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 122,
+                  child: Card(
+                    child: SfDataGrid(
+                      rowsPerPage: 30,
+                      controller: controller,
+                      isScrollbarAlwaysShown: true,
+                      highlightRowOnHover: true,
+                      headerGridLinesVisibility: GridLinesVisibility.none,
+                      source: dispositivosDataSource,
+                      columnWidthMode: ColumnWidthMode.fill,
+                      columnResizeMode: ColumnResizeMode.onResize,
+                      selectionMode: SelectionMode.none,
+                      allowColumnsResizing: true,
+                      onCellTap: (DataGridCellTapDetails v) {
 
-                    },
-                    onColumnResizeUpdate: (v) {
-                      setState(() {
-                        if (v.column.columnName == "Nombre") {
-                          tNombre = v.width;
-                        }
-                        if (v.column.columnName == "Etiqueta") {
-                          tEtiqueta = v.width;
-                        }
-                        if (v.column.columnName == "Estatus") {
-                          tEstatus = v.width;
-                        }
-                        if (v.column.columnName == "Código Dispositivo") {
-                          tCodigo = v.width;
-                        }
-                      });
-                      return true;
-                    },
-                    onCellSecondaryTap: (v) {
-                      menuContextual(v.globalPosition, context, [
-                        PopupMenuItem(
-                          onTap: () {
+                      },
+                      onColumnResizeUpdate: (v) {
+                        setState(() {
+                          if (v.column.columnName == "Nombre") {
+                            tNombre = v.width;
+                          }
+                          if (v.column.columnName == "Etiqueta") {
+                            tEtiqueta = v.width;
+                          }
+                          if (v.column.columnName == "Estatus") {
+                            tEstatus = v.width;
+                          }
+                          if (v.column.columnName == "Código Dispositivo") {
+                            tCodigo = v.width;
+                          }
+                        });
+                        return true;
+                      },
+                      onCellSecondaryTap: (v) {
+                        menuContextual(v.globalPosition, context, [
+                          PopupMenuItem(
+                            onTap: () {
 
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.delete),
-                              SizedBox(
-                                width: 8,
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.delete),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "Eliminar",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          )
+                        ]);
+                      },
+                      columns: [
+                        GridColumn(
+                          minimumWidth: 25,
+                          columnName: 'Nombre',
+                          width: tNombre,
+                          label: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.rectangle,
+                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(4)),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Nombre',
+                              overflow: TextOverflow.clip,
+                              softWrap: true,
+                              style: TextStyle(
+                                  color: Colors.white
                               ),
-                              Text(
-                                "Eliminar",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        )
-                      ]);
-                    },
-                    columns: [
-                      GridColumn(
-                        minimumWidth: 25,
-                        columnName: 'Nombre',
-                        width: tNombre,
-                        label: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.rectangle,
-                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(4)),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Nombre',
-                            overflow: TextOverflow.clip,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Colors.white
                             ),
                           ),
                         ),
-                      ),
-                      GridColumn(
-                        minimumWidth: 25,
-                        columnName: 'Etiqueta',
-                        width: tEtiqueta,
-                        label: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.rectangle,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Etiqueta',
-                            overflow: TextOverflow.clip,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Colors.white
+                        GridColumn(
+                          minimumWidth: 25,
+                          columnName: 'Etiqueta',
+                          width: tEtiqueta,
+                          label: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.rectangle,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Etiqueta',
+                              overflow: TextOverflow.clip,
+                              softWrap: true,
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      GridColumn(
-                        minimumWidth: 25,
-                        columnName: 'Estatus',
-                        width: tEstatus,
-                        label: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.rectangle,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Estatus',
-                            overflow: TextOverflow.clip,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Colors.white
+                        GridColumn(
+                          minimumWidth: 25,
+                          columnName: 'Estatus',
+                          width: tEstatus,
+                          label: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.rectangle,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Estatus',
+                              overflow: TextOverflow.clip,
+                              softWrap: true,
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      GridColumn(
-                        minimumWidth: 25,
-                        columnName: 'Código Dispositivo',
-                        width: tCodigo,
-                        label: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.rectangle,
-                            borderRadius: const BorderRadius.only(topRight: Radius.circular(4)),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Código Dispositivo',
-                            overflow: TextOverflow.clip,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Colors.white
+                        GridColumn(
+                          minimumWidth: 25,
+                          columnName: 'Código Dispositivo',
+                          width: tCodigo,
+                          label: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.rectangle,
+                              borderRadius: const BorderRadius.only(topRight: Radius.circular(4)),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Código Dispositivo',
+                              overflow: TextOverflow.clip,
+                              softWrap: true,
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 10,),
-              const Flexible(
+              Flexible(
                 child: SizedBox(
                   width: 500,
-                  height: 120,
-                  child: Card(
+                  height: MediaQuery.of(context).size.height - 122,
+                  child: const Card(
                     child: Center(child: Text("prueba"),),
                   ),
                 ),
