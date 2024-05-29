@@ -16,7 +16,7 @@ class _TablaDispositivosState extends State<TablaDispositivos> {
   Widget build(BuildContext context) {
     return SfDataGrid(
       source: source,
-      columns: [],
+      columns: const [],
     );
   }
 }

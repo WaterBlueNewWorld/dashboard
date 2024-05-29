@@ -256,7 +256,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                         ),
                                         child: Consumer<T>(
                                           builder: (context, opciones, child) {
-                                            dynamic opc = opciones;
+                                            // dynamic opc = opciones;
                                             return TextButton(
                                               style: TextButton.styleFrom(
                                                 shape: RoundedRectangleBorder(
@@ -299,7 +299,6 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                 fixedSize: const Size(210, 70),
                                               ),
                                               onPressed: () {
-                                                opc.updateSituacionAnterior();
                                                 opc.updateEstatusAnterior();
                                                 widget.filtrosCallback!(opciones);
                                                 setState(() {

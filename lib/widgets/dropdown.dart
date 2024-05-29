@@ -2,23 +2,23 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 typedef ListaAsync<T> = Future<List<T>> Function(String? x);
-typedef bool Comparacion<T>(T x, T y);
-typedef String ObjetoComoString<T>(T x);
-typedef Funcion<T> = Function(T x);
+typedef Comparacion<T> = bool Function(T x, T y);
+typedef ObjetoComoString<T> = String Function(T x);
+typedef Funcion<T> = void Function(T? x);
 
 class ListaDropDown<T> extends StatefulWidget {
   final ListaAsync<T>? async;
   final Comparacion<T> funcionComparar;
   final ObjetoComoString<T> objComoString;
   final List<T> listaObjetos;
-  final Funcion<T> laFuncion;
+  final Funcion<T> callbackFuncion;
 
   const ListaDropDown({
     super.key,
     required this.funcionComparar,
     required this.listaObjetos,
     required this.objComoString,
-    required this.laFuncion
+    required this.callbackFuncion
   }) : async = null;
 
   const ListaDropDown.objetosAsync({
@@ -26,7 +26,7 @@ class ListaDropDown<T> extends StatefulWidget {
     required this.async,
     required this.funcionComparar,
     required this.objComoString,
-     required this.laFuncion,
+     required this.callbackFuncion,
   }) : listaObjetos = const [];
 
   @override
@@ -48,7 +48,7 @@ class StateListaDropdown<T> extends State<ListaDropDown<T>> {
         return widget.objComoString(i);
       },
       onChanged: (T? i) {
-
+        widget.callbackFuncion(i);
       },
     );
   }

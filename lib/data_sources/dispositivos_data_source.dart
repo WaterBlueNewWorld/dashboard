@@ -10,14 +10,16 @@ class DispositivosDataSource extends DataGridSource {
   List<DataGridRow> filas = [];
   List<Dispositivo> listaDispositivos = [];
   List<Sucursal> sucursales = [
-    Sucursal(nombre: "2480"),
-    Sucursal(nombre: "2481"),
-    Sucursal(nombre: "2482"),
-    Sucursal(nombre: "2483"),
+    const Sucursal(nombre: "2480"),
+    const Sucursal(nombre: "2481"),
+    const Sucursal(nombre: "2482"),
+    const Sucursal(nombre: "2483"),
   ];
 
   DispositivosDataSource() {
-    makeRows();
+    generadorDeDatos().whenComplete(() {
+      makeRows();
+    });
   }
 
   @override
@@ -34,7 +36,7 @@ class DispositivosDataSource extends DataGridSource {
           estatus: faker.geo.latitude().toString(),
           observaciones: faker.lorem.random.amount((_){random.string(10);}, 10).join("").toString(),
           ip: faker.internet.ipv4Address(),
-          sucursal: sucursales[random.integer(3, min: 0)]
+          sucursal: sucursales[random.integer(4, min: 0)]
         );
       });
     });
@@ -42,17 +44,50 @@ class DispositivosDataSource extends DataGridSource {
   }
 
   Future makeRows() async {
-    await generadorDeDatos().whenComplete(() {
-      filas = listaDispositivos.map((e) {
-        return DataGridRow(cells: [
-          DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
-          DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
-          DataGridCell<String>(columnName: "Estatus", value: e.estatus),
-          DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
-        ]);
-      }).toList();
-    });
+    filas = listaDispositivos.map((e) {
+      return DataGridRow(cells: [
+        DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
+        DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
+        DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
+        DataGridCell<String>(columnName: "Estatus", value: e.estatus),
+        DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
+      ]);
+    }).toList();
     notifyListeners();
+  }
+
+  Future makeRowsSort(List<Dispositivo> dispositivosSort) async {
+    filas = dispositivosSort.map((e) {
+      return DataGridRow(cells: [
+        DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
+        DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
+        DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
+        DataGridCell<String>(columnName: "Estatus", value: e.estatus),
+        DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
+      ]);
+    }).toList();
+    notifyListeners();
+  }
+
+  void filtrarDispositivos(Sucursal? sucursal) {
+    var listaSort = listaDispositivos.where((test) {
+      if (sucursal?.nombre != null) {
+        return test.sucursal.nombre == sucursal?.nombre;
+      } else {
+        return false;
+      }
+    }).toList();
+    makeRowsSort(listaSort);
+  }
+
+  void obtenerInfoFila(List<DataGridCell> celdas) {
+    Map<String, dynamic> celdaToJson = {};
+    celdas.map((item){
+      celdaToJson.addAll({
+        "Nombre": item.columnName,
+        "valor": item.value,
+      });
+    });
   }
 
   @override
@@ -91,7 +126,14 @@ class DispositivosDataSource extends DataGridSource {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            row.getCells()[4].value.toString(),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TarjetaInfo extends StatefulWidget {
-  final Icon icono;
+  final IconData icono;
   final String titulo;
   final String subtitulo;
+  final double? altura;
+  final double? ancho;
 
   const TarjetaInfo({
     super.key,
     required this.icono,
     required this.titulo,
     required this.subtitulo,
+    this.altura,
+    this.ancho,
   });
 
   @override
@@ -28,21 +32,30 @@ class _TarjetaInfoState extends State<TarjetaInfo> {
             children: [
               Expanded(
                 child: SizedBox(
-                  height: 92,
-                  width: MediaQuery.of(context).size.width,
+                  width: widget.ancho,
+                  height: widget.altura,
                   child: Card(
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.only(
-                        top: 7,
-                        bottom: 14,
-                        left: 15,
-                        right: 60,
-                      ),
-                      leading: widget.icono,
-                      title: Text(widget.titulo),
-                      subtitle: Text(widget.subtitulo),
-                      isThreeLine: true,
-                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                widget.icono,
+                                size: 30,
+                              ),
+                              const SizedBox(width: 8,),
+                              Text(
+                                widget.titulo,
+                                style: const TextStyle(fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ),
                 ),
               ),

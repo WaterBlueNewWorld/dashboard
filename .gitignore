@@ -10,6 +10,10 @@
 .svn/
 migrate_working_dir/
 
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugin_registrant.h
+windows/flutter/generated_plugins.cmake
+
 # IntelliJ related
 *.iml
 *.ipr
