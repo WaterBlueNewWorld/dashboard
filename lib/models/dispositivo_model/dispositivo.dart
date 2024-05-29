@@ -1,3 +1,4 @@
+import 'package:binding_prueba/models/sucursal_model/sucursal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 part 'dispositivo.freezed.dart';
@@ -13,6 +14,7 @@ class Dispositivo with _$Dispositivo {
     required String? estatus,
     required String? observaciones,
     required String? ip,
+    required Sucursal sucursal,
   }) = _Dispositivo;
 
   factory Dispositivo.fromJson(Map<String, dynamic> json) => _$DispositivoFromJson(json);

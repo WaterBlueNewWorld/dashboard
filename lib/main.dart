@@ -1,9 +1,8 @@
 import 'package:binding_prueba/routes/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 void main() {
-  runApp(const GetMaterialApp(home: DemoDashboard()));
+  runApp(DemoDashboard());
 }
 
 class DemoDashboard extends StatelessWidget {

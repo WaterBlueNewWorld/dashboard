@@ -15,6 +15,7 @@ _$DispositivoImpl _$$DispositivoImplFromJson(Map<String, dynamic> json) =>
       estatus: json['estatus'] as String?,
       observaciones: json['observaciones'] as String?,
       ip: json['ip'] as String?,
+      sucursal: Sucursal.fromJson(json['sucursal'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$DispositivoImplToJson(_$DispositivoImpl instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$DispositivoImplToJson(_$DispositivoImpl instance) =>
       'estatus': instance.estatus,
       'observaciones': instance.observaciones,
       'ip': instance.ip,
+      'sucursal': instance.sucursal,
     };

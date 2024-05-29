@@ -9,5 +9,7 @@ class Sucursal with _$Sucursal {
     required String? nombre,
   }) = _Sucursal;
 
+  bool isEqual (Sucursal model) => nombre == model.nombre;
+
   factory Sucursal.fromJson(Map<String, dynamic> json) => _$SucursalFromJson(json);
 }
