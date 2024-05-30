@@ -24,44 +24,48 @@ class _TarjetaInfoState extends State<TarjetaInfo> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 460,
-      height: 92,
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  width: widget.ancho,
-                  height: widget.altura,
-                  child: Card(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                widget.icono,
-                                size: 30,
-                              ),
-                              const SizedBox(width: 8,),
-                              Text(
-                                widget.titulo,
-                                style: const TextStyle(fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+      width: widget.ancho,
+      height: widget.altura,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Icon(
+                    widget.icono,
+                    size: 30,
                   ),
-                ),
+                  const SizedBox(width: 8,),
+                  Flexible(
+                    child: Text(
+                      widget.titulo,
+                      style: const TextStyle(fontSize: 18, overflow: TextOverflow.ellipsis),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 15,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(widget.subtitulo),
+                  )
+                ],
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

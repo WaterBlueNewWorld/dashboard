@@ -6,6 +6,7 @@ import 'package:binding_prueba/widgets/barra_herramientas.dart';
 import 'package:binding_prueba/widgets/tarjeta_info.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../widgets/menu_contextual.dart';
@@ -41,6 +42,7 @@ class StateDashboard extends State<Dashboard> {
   final DispositivosDataSource dispositivosDataSource = DispositivosDataSource();
   DataGridController controller = DataGridController();
   final GlobalKey llave = GlobalKey();
+  Map<String, dynamic> infoCelda = {};
 
   @override
   void initState() {
@@ -81,27 +83,35 @@ class StateDashboard extends State<Dashboard> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 65,),
-              BarraHerramientas<BDHProvider>(
-                actualizarCallback: (v, b){
-                  dispositivosDataSource.makeRows();
-                },
-                busquedaCallback: (v, s) {
+              Flexible(
+                child: BarraHerramientas<BDHProvider>(
+                  actualizarCallback: (v, b){
+                    dispositivosDataSource.makeRows();
+                  },
+                  filtrosCallback: (v) {
+                    dispositivosDataSource.filtrarEstatus(v.estatus.toString());
+                  },
+                  busquedaCallback: (v, s) {
 
-                },
-                fechaCallback: (v) {},
-              ),
-              SizedBox(
-                width: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: DropdownSearch<Sucursal>(
-                    items: dispositivosDataSource.sucursales,
-                    compareFn: (x, y) => x.isEqual(y),
-                    itemAsString: (i) => i.nombre!,
-                    onChanged: (Sucursal? i) {
-                      dispositivosDataSource.filtrarDispositivos(i);
-                    },
-                  ),
+                  },
+                  fechaCallback: (v) {},
+                  widgetsExtra: [
+                    SizedBox(
+                      width: 200,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: DropdownSearch<Sucursal>(
+                          items: dispositivosDataSource.sucursales,
+                          compareFn: (x, y) => x.isEqual(y),
+                          itemAsString: (i) => i.nombre!,
+                          onChanged: (Sucursal? i) {
+                            context.read<BDHProvider>().updateFiltroActivo(true);
+                            dispositivosDataSource.filtrarDispositivos(i);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -130,7 +140,9 @@ class StateDashboard extends State<Dashboard> {
                           allowColumnsResizing: true,
                           onCellTap: (DataGridCellTapDetails v) {
                             var numero = v.rowColumnIndex.rowIndex - 1;
-                            dispositivosDataSource.obtenerInfoFila(dispositivosDataSource.filas[numero].getCells());
+                            setState(() {
+                              infoCelda = dispositivosDataSource.obtenerInfoFila(dispositivosDataSource.filas[numero].getCells());
+                            });
                           },
                           onColumnResizeUpdate: (v) {
                             setState(() {
@@ -207,8 +219,8 @@ class StateDashboard extends State<Dashboard> {
                     fit: FlexFit.loose,
                     child: TarjetaInfo(
                       icono: Icons.info_outline,
-                      titulo: "Informacion de dispositivo",
-                      subtitulo: "A",
+                      titulo: "Información de dispositivo",
+                      subtitulo: infoCelda.toString(),
                       altura: MediaQuery.of(context).size.height,
                       ancho: 500,
                     ),

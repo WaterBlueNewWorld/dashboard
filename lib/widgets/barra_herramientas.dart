@@ -197,7 +197,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       ),
                                                       onTap: () {
                                                         dynamic valorRadio = context.read<T>();
-                                                        valorRadio.updateEstatus(Estatus.bueno);
+                                                        valorRadio.updateEstatus(Estatus.malo);
                                                         if (kDebugMode) {
                                                           print("Situacion: ${valorRadio.estatus}");
                                                         }
@@ -299,7 +299,8 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                 fixedSize: const Size(210, 70),
                                               ),
                                               onPressed: () {
-                                                opc.updateEstatusAnterior();
+                                                opc.updateEstatusAnterior(Estatus.na);
+                                                opc.updateFiltroActivo(true);
                                                 widget.filtrosCallback!(opciones);
                                                 setState(() {
                                                   visibleFiltros = false;
@@ -439,10 +440,9 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                   child: Consumer<T>(
                     builder: (context, opciones, child) {
                       dynamic opc = opciones;
-                      if (opc.filtroActivo || opc.fechaDiferente) {
+                      if (opc.filtroActivo) {
                         return ElevatedButton(
                           onPressed: () {
-                            opc.updateBoolFecha(false);
                             opc.valoresDefault();
                             setState(() {
                               _pickerController.selectedRange = PickerDateRange(

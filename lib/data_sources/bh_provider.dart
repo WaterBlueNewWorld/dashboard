@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/estatus.dart';
 
 class BDHProvider extends ChangeNotifier {
-  bool _fechaDiferente = false;
+  bool _filtroActivo = false;
   final DateTime _fechaInicial = DateTime.utc(
     DateTime.now().year.toInt(),
     DateTime.now().month.toInt(),
@@ -23,10 +23,10 @@ class BDHProvider extends ChangeNotifier {
   Estatus? _estatusAnterior;
   Estatus? estatus = Estatus.bueno;
 
-  bool get filtroActivo => _fechaDiferente;
-  DateTime get fechaInicial => _fechaInicial;
+  bool get filtroActivo => _filtroActivo;
   // Se le agrega las horas y fechas de las 11:59:59.99 para que tome
   // el dia completo el query del lado de la API
+  DateTime get fechaInicial => _fechaInicial;
   DateTime get fechaFinal => _fechaFinal.add(
     const Duration(
       hours: 23,
@@ -36,7 +36,6 @@ class BDHProvider extends ChangeNotifier {
     ),
   );
   Estatus? get estatusAnterior => _estatusAnterior;
-  bool get fechaDiferente => _fechaDiferente;
 
   DateTime get fechaInicialSeleccion => _fechaInicialSeleccion;
   DateTime get fechaFinalSeleccion => _fechaFinalSeleccion.add(
@@ -48,8 +47,8 @@ class BDHProvider extends ChangeNotifier {
     ),
   );
 
-  void updateBoolFecha(bool x) {
-    _fechaDiferente = x;
+  void updateFiltroActivo(bool x) {
+    _filtroActivo = x;
     notifyListeners();
   }
 
@@ -68,9 +67,16 @@ class BDHProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateEstatusAnterior(Estatus newEstatus) {
+    _estatusAnterior = newEstatus;
+    notifyListeners();
+  }
+
   void valoresDefault() {
     _fechaInicialSeleccion = _fechaInicial;
     _fechaFinalSeleccion = _fechaFinal;
+    _filtroActivo = false;
+    estatus = null;
     notifyListeners();
   }
 

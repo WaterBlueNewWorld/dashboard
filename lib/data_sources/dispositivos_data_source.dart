@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../models/estatus.dart';
+
 class DispositivosDataSource extends DataGridSource {
   final Faker faker = Faker(seed: 453233);
   List<DataGridRow> filas = [];
@@ -33,7 +35,7 @@ class DispositivosDataSource extends DataGridSource {
           etiqueta: faker.guid.guid(),
           codigo: faker.guid.guid() + index.toString(),
           enUso: true,
-          estatus: faker.geo.latitude().toString(),
+          estatus: Estatus.values[random.integer(3, min: 0)].toString(),
           observaciones: faker.lorem.random.amount((_){random.string(10);}, 10).join("").toString(),
           ip: faker.internet.ipv4Address(),
           sucursal: sucursales[random.integer(4, min: 0)]
@@ -44,15 +46,17 @@ class DispositivosDataSource extends DataGridSource {
   }
 
   Future makeRows() async {
-    filas = listaDispositivos.map((e) {
-      return DataGridRow(cells: [
-        DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
-        DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
-        DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
-        DataGridCell<String>(columnName: "Estatus", value: e.estatus),
-        DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
-      ]);
-    }).toList();
+    await generadorDeDatos().whenComplete(() {
+      filas = listaDispositivos.map((e) {
+        return DataGridRow(cells: [
+          DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
+          DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
+          DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
+          DataGridCell<String>(columnName: "Estatus", value: e.estatus),
+          DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
+        ]);
+      }).toList();
+    });
     notifyListeners();
   }
 
@@ -80,14 +84,22 @@ class DispositivosDataSource extends DataGridSource {
     makeRowsSort(listaSort);
   }
 
-  void obtenerInfoFila(List<DataGridCell> celdas) {
+  void filtrarEstatus(String estatus) {
+    var listaFiltrada = listaDispositivos.where((test) {
+      return test.estatus == estatus;
+    }).toList();
+    makeRowsSort(listaFiltrada);
+  }
+
+  Map<String, dynamic> obtenerInfoFila(List<DataGridCell> celdas) {
+    List<DataGridCell> infoFila = celdas.toList(growable: false);
     Map<String, dynamic> celdaToJson = {};
-    celdas.map((item){
-      celdaToJson.addAll({
-        "Nombre": item.columnName,
-        "valor": item.value,
-      });
-    });
+
+    for (DataGridCell item in infoFila) {
+      celdaToJson.addAll({item.columnName: item.value});
+    }
+
+    return celdaToJson;
   }
 
   @override
