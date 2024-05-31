@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:avatar_hover/avatar_hover.dart';
@@ -16,7 +15,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:file_saver/file_saver_web.dart';
 import 'package:file_saver/file_saver.dart';
 
 import '../widgets/menu_contextual.dart';
@@ -184,98 +182,117 @@ class StateDashboard extends State<Dashboard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
+                  Flexible(
                     flex: 3,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height - 122,
-                      child: Card(
-                        child: SfDataGrid(
-                          key: _llaveTabla,
-                          rowsPerPage: 30,
-                          controller: controlTabla,
-                          isScrollbarAlwaysShown: true,
-                          highlightRowOnHover: true,
-                          headerGridLinesVisibility: GridLinesVisibility.none,
-                          source: dispositivosDataSource,
-                          columnWidthMode: ColumnWidthMode.fill,
-                          columnResizeMode: ColumnResizeMode.onResize,
-                          allowSorting: true,
-                          selectionMode: SelectionMode.none,
-                          allowColumnsResizing: true,
-                          onCellTap: (DataGridCellTapDetails v) {
-                            var numero = v.rowColumnIndex.rowIndex - 1;
-                            setState(() {
-                              infoCelda = DispositivosDataSource.listaDispositivos[numero].toStringFormateada();
-                            });
-                          },
-                          onColumnResizeUpdate: (v) {
-                            setState(() {
-                              if (v.column.columnName == "Nombre") {
-                                anchoColumnas[0] = v.width;
-                              }
-                              if (v.column.columnName == "Etiqueta") {
-                                anchoColumnas[1] = v.width;
-                              }
-                              if (v.column.columnName == "Sucursal") {
-                                anchoColumnas[2] = v.width;
-                              }
-                              if (v.column.columnName == "Estatus") {
-                                anchoColumnas[3] = v.width;
-                              }
-                              if (v.column.columnName == "Código Dispositivo") {
-                                anchoColumnas[4] = v.width;
-                              }
-                            });
-                            return true;
-                          },
-                          onCellSecondaryTap: (v) {
-                            menuContextual(v.globalPosition, context, [
-                              PopupMenuItem(
-                                onTap: () {
+                    child: Column(
+                      children: [
+                        Flexible(
+                          child: Card(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: SfDataGrid(
+                                    key: _llaveTabla,
+                                    rowsPerPage: 30,
+                                    controller: controlTabla,
+                                    isScrollbarAlwaysShown: true,
+                                    highlightRowOnHover: true,
+                                    headerGridLinesVisibility: GridLinesVisibility.none,
+                                    source: dispositivosDataSource,
+                                    columnWidthMode: ColumnWidthMode.fill,
+                                    columnResizeMode: ColumnResizeMode.onResize,
+                                    allowSorting: true,
+                                    selectionMode: SelectionMode.none,
+                                    allowColumnsResizing: true,
+                                    navigationMode: GridNavigationMode.row,
+                                    allowColumnsDragging: true,
+                                    onCellTap: (DataGridCellTapDetails v) {
+                                      var numero = v.rowColumnIndex.rowIndex - 1;
+                                      setState(() {
+                                        infoCelda = dispositivosDataSource.listaDispositivos[numero].toStringFormateada();
+                                      });
+                                    },
+                                    onColumnResizeUpdate: (v) {
+                                      setState(() {
+                                        if (v.column.columnName == "Nombre") {
+                                          anchoColumnas[0] = v.width;
+                                        }
+                                        if (v.column.columnName == "Etiqueta") {
+                                          anchoColumnas[1] = v.width;
+                                        }
+                                        if (v.column.columnName == "Sucursal") {
+                                          anchoColumnas[2] = v.width;
+                                        }
+                                        if (v.column.columnName == "Estatus") {
+                                          anchoColumnas[3] = v.width;
+                                        }
+                                        if (v.column.columnName == "Código Dispositivo") {
+                                          anchoColumnas[4] = v.width;
+                                        }
+                                      });
+                                      return true;
+                                    },
+                                    onCellSecondaryTap: (v) {
+                                      menuContextual(v.globalPosition, context, [
+                                        PopupMenuItem(
+                                          onTap: () {
 
-                                },
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.delete),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      "Eliminar",
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ]);
-                          },
-                          columns: List.generate(columnas.length, (index) {
-                            return GridColumn(
-                              minimumWidth: 25,
-                              columnName: columnas[index],
-                              width: anchoColumnas[index],
-                              label: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(4)),
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  columnas[index],
-                                  overflow: TextOverflow.clip,
-                                  softWrap: true,
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                          },
+                                          child: const Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Icon(Icons.delete),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                "Eliminar",
+                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ]);
+                                    },
+                                    columns: List.generate(columnas.length, (index) {
+                                      return GridColumn(
+                                        minimumWidth: 25,
+                                        columnName: columnas[index],
+                                        width: anchoColumnas[index],
+                                        label: Container(
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).primaryColor,
+                                            shape: BoxShape.rectangle,
+                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(4)),
+                                          ),
+                                          padding: const EdgeInsets.all(8),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            columnas[index],
+                                            overflow: TextOverflow.clip,
+                                            softWrap: true,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
+                                Flexible(
+                                  flex: 0,
+                                  child: SfDataPager(
+                                    delegate: dispositivosDataSource,
+                                    pageCount: 20,
+                                    direction: Axis.horizontal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 10,),

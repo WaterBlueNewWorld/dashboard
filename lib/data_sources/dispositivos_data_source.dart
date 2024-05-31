@@ -12,7 +12,7 @@ class DispositivosDataSource extends DataGridSource {
   final Faker faker = Faker(seed: 453233);
   List<DataGridRow> filas = [];
   bool cargando = true;
-  static late List<Dispositivo> listaDispositivos;
+  List<Dispositivo> listaDispositivos = [];
   List<Sucursal> sucursales = [
     const Sucursal(nombre: "2480"),
     const Sucursal(nombre: "2481"),
@@ -22,7 +22,7 @@ class DispositivosDataSource extends DataGridSource {
 
   DispositivosDataSource() {
     makeRows().whenComplete(() {
-      cargando = false;
+      notifyListeners();
     }).catchError((s) {
       throw Exception(s.toString());
     });
