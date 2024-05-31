@@ -136,6 +136,7 @@ class StateDashboard extends State<Dashboard> {
                           source: dispositivosDataSource,
                           columnWidthMode: ColumnWidthMode.fill,
                           columnResizeMode: ColumnResizeMode.onResize,
+                          allowSorting: true,
                           selectionMode: SelectionMode.none,
                           allowColumnsResizing: true,
                           onCellTap: (DataGridCellTapDetails v) {
@@ -220,7 +221,10 @@ class StateDashboard extends State<Dashboard> {
                     child: TarjetaInfo(
                       icono: Icons.info_outline,
                       titulo: "Información de dispositivo",
-                      subtitulo: infoCelda.toString(),
+                      subtitulo: "${infoCelda.keys.toList()[0]} - ${infoCelda.values.toList()[0]} \n"
+                          "${infoCelda.keys.toList()[1]} - ${infoCelda.values.toList()[1]} \n"
+                          "${infoCelda.keys.toList()[2]} - ${infoCelda.values.toList()[2]} \n"
+                          "${infoCelda.keys.toList()[3]} - ${infoCelda.values.toList()[3]} \n",
                       altura: MediaQuery.of(context).size.height,
                       ancho: 500,
                     ),

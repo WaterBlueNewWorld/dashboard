@@ -410,7 +410,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                             visibleDate = !visibleDate;
                           });
                         },
-                        icon: const Icon(Icons.calendar_today_outlined),
+                        icon: const Icon(Icons.calendar_month_outlined),
                       ),
                     ),
                     const SizedBox(width: 20,),
