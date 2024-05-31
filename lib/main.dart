@@ -1,5 +1,6 @@
-import 'package:binding_prueba/data_sources/bh_provider.dart';
+import 'package:binding_prueba/data_sources/bh_controller.dart';
 import 'package:binding_prueba/routes/dashboard.dart';
+import 'package:binding_prueba/utils/tabla_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:provider/provider.dart';

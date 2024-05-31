@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../models/estatus.dart';
+import '../models/tipo.dart';
 
 class DispositivosDataSource extends DataGridSource {
   final Faker faker = Faker(seed: 453233);
   List<DataGridRow> filas = [];
-  List<Dispositivo> listaDispositivos = [];
+  bool cargando = true;
+  static late List<Dispositivo> listaDispositivos;
   List<Sucursal> sucursales = [
     const Sucursal(nombre: "2480"),
     const Sucursal(nombre: "2481"),
@@ -19,9 +21,12 @@ class DispositivosDataSource extends DataGridSource {
   ];
 
   DispositivosDataSource() {
-    generadorDeDatos().whenComplete(() {
-      makeRows();
+    makeRows().whenComplete(() {
+      cargando = false;
+    }).catchError((s) {
+      throw Exception(s.toString());
     });
+    notifyListeners();
   }
 
   @override
@@ -33,12 +38,14 @@ class DispositivosDataSource extends DataGridSource {
         return Dispositivo(
           nombre: faker.person.name(),
           etiqueta: faker.guid.guid(),
-          codigo: faker.guid.guid() + index.toString(),
+          idInventario: faker.guid.guid() + index.toString(),
           enUso: true,
-          estatus: Estatus.values[random.integer(3, min: 0)].toString(),
+          estatus: Estatus.values[random.integer(5, min: 0)],
           observaciones: faker.lorem.random.amount((_){random.string(10);}, 10).join("").toString(),
           ip: faker.internet.ipv4Address(),
-          sucursal: sucursales[random.integer(4, min: 0)]
+          sucursal: sucursales[random.integer(4, min: 0)],
+          tipo: Tipo.a,
+          numInventario: faker.randomGenerator.integer(3000),
         );
       });
     });
@@ -46,18 +53,20 @@ class DispositivosDataSource extends DataGridSource {
   }
 
   Future makeRows() async {
+    cargando = true;
     await generadorDeDatos().whenComplete(() {
+      cargando = false;
       filas = listaDispositivos.map((e) {
         return DataGridRow(cells: [
           DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
           DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
           DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
-          DataGridCell<String>(columnName: "Estatus", value: e.estatus),
-          DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
+          DataGridCell<String>(columnName: "Estatus", value: e.estatus.nombre),
+          DataGridCell<String>(columnName: "Código Dispositivo", value: e.idInventario),
         ]);
-      }).toList();
+      }).toList(growable: false);
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   Future makeRowsSort(List<Dispositivo> dispositivosSort) async {
@@ -66,8 +75,8 @@ class DispositivosDataSource extends DataGridSource {
         DataGridCell<String?>(columnName: "Nombre", value: e.nombre),
         DataGridCell<String>(columnName: "Etiqueta", value: e.etiqueta),
         DataGridCell<String>(columnName: "Sucursal", value: e.sucursal.nombre),
-        DataGridCell<String>(columnName: "Estatus", value: e.estatus),
-        DataGridCell<String>(columnName: "Código Dispositivo", value: e.codigo),
+        DataGridCell<String>(columnName: "Estatus", value: e.estatus.nombre),
+        DataGridCell<String>(columnName: "Código Dispositivo", value: e.idInventario),
       ]);
     }).toList();
     notifyListeners();
@@ -86,20 +95,13 @@ class DispositivosDataSource extends DataGridSource {
 
   void filtrarEstatus(String estatus) {
     var listaFiltrada = listaDispositivos.where((test) {
-      return test.estatus == estatus;
+      return test.estatus.nombre == estatus;
     }).toList();
     makeRowsSort(listaFiltrada);
   }
 
-  Map<String, dynamic> obtenerInfoFila(List<DataGridCell> celdas) {
-    List<DataGridCell> infoFila = celdas.toList(growable: false);
-    Map<String, dynamic> celdaToJson = {};
-
-    for (DataGridCell item in infoFila) {
-      celdaToJson.addAll({item.columnName: item.value});
-    }
-
-    return celdaToJson;
+  String obtenerInfoFila(int numero) {
+    return listaDispositivos[numero].toStringFormateada();
   }
 
   @override

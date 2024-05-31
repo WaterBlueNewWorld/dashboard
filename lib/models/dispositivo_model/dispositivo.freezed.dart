@@ -20,11 +20,13 @@ Dispositivo _$DispositivoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Dispositivo {
+  String? get idInventario => throw _privateConstructorUsedError;
   String? get nombre => throw _privateConstructorUsedError;
   String? get etiqueta => throw _privateConstructorUsedError;
-  String? get codigo => throw _privateConstructorUsedError;
+  int get numInventario => throw _privateConstructorUsedError;
   bool? get enUso => throw _privateConstructorUsedError;
-  String? get estatus => throw _privateConstructorUsedError;
+  Estatus get estatus => throw _privateConstructorUsedError;
+  Tipo get tipo => throw _privateConstructorUsedError;
   String? get observaciones => throw _privateConstructorUsedError;
   String? get ip => throw _privateConstructorUsedError;
   Sucursal get sucursal => throw _privateConstructorUsedError;
@@ -42,11 +44,13 @@ abstract class $DispositivoCopyWith<$Res> {
       _$DispositivoCopyWithImpl<$Res, Dispositivo>;
   @useResult
   $Res call(
-      {String? nombre,
+      {String? idInventario,
+      String? nombre,
       String? etiqueta,
-      String? codigo,
+      int numInventario,
       bool? enUso,
-      String? estatus,
+      Estatus estatus,
+      Tipo tipo,
       String? observaciones,
       String? ip,
       Sucursal sucursal});
@@ -67,16 +71,22 @@ class _$DispositivoCopyWithImpl<$Res, $Val extends Dispositivo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? idInventario = freezed,
     Object? nombre = freezed,
     Object? etiqueta = freezed,
-    Object? codigo = freezed,
+    Object? numInventario = null,
     Object? enUso = freezed,
-    Object? estatus = freezed,
+    Object? estatus = null,
+    Object? tipo = null,
     Object? observaciones = freezed,
     Object? ip = freezed,
     Object? sucursal = null,
   }) {
     return _then(_value.copyWith(
+      idInventario: freezed == idInventario
+          ? _value.idInventario
+          : idInventario // ignore: cast_nullable_to_non_nullable
+              as String?,
       nombre: freezed == nombre
           ? _value.nombre
           : nombre // ignore: cast_nullable_to_non_nullable
@@ -85,18 +95,22 @@ class _$DispositivoCopyWithImpl<$Res, $Val extends Dispositivo>
           ? _value.etiqueta
           : etiqueta // ignore: cast_nullable_to_non_nullable
               as String?,
-      codigo: freezed == codigo
-          ? _value.codigo
-          : codigo // ignore: cast_nullable_to_non_nullable
-              as String?,
+      numInventario: null == numInventario
+          ? _value.numInventario
+          : numInventario // ignore: cast_nullable_to_non_nullable
+              as int,
       enUso: freezed == enUso
           ? _value.enUso
           : enUso // ignore: cast_nullable_to_non_nullable
               as bool?,
-      estatus: freezed == estatus
+      estatus: null == estatus
           ? _value.estatus
           : estatus // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Estatus,
+      tipo: null == tipo
+          ? _value.tipo
+          : tipo // ignore: cast_nullable_to_non_nullable
+              as Tipo,
       observaciones: freezed == observaciones
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
@@ -130,11 +144,13 @@ abstract class _$$DispositivoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? nombre,
+      {String? idInventario,
+      String? nombre,
       String? etiqueta,
-      String? codigo,
+      int numInventario,
       bool? enUso,
-      String? estatus,
+      Estatus estatus,
+      Tipo tipo,
       String? observaciones,
       String? ip,
       Sucursal sucursal});
@@ -154,16 +170,22 @@ class __$$DispositivoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? idInventario = freezed,
     Object? nombre = freezed,
     Object? etiqueta = freezed,
-    Object? codigo = freezed,
+    Object? numInventario = null,
     Object? enUso = freezed,
-    Object? estatus = freezed,
+    Object? estatus = null,
+    Object? tipo = null,
     Object? observaciones = freezed,
     Object? ip = freezed,
     Object? sucursal = null,
   }) {
     return _then(_$DispositivoImpl(
+      idInventario: freezed == idInventario
+          ? _value.idInventario
+          : idInventario // ignore: cast_nullable_to_non_nullable
+              as String?,
       nombre: freezed == nombre
           ? _value.nombre
           : nombre // ignore: cast_nullable_to_non_nullable
@@ -172,18 +194,22 @@ class __$$DispositivoImplCopyWithImpl<$Res>
           ? _value.etiqueta
           : etiqueta // ignore: cast_nullable_to_non_nullable
               as String?,
-      codigo: freezed == codigo
-          ? _value.codigo
-          : codigo // ignore: cast_nullable_to_non_nullable
-              as String?,
+      numInventario: null == numInventario
+          ? _value.numInventario
+          : numInventario // ignore: cast_nullable_to_non_nullable
+              as int,
       enUso: freezed == enUso
           ? _value.enUso
           : enUso // ignore: cast_nullable_to_non_nullable
               as bool?,
-      estatus: freezed == estatus
+      estatus: null == estatus
           ? _value.estatus
           : estatus // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Estatus,
+      tipo: null == tipo
+          ? _value.tipo
+          : tipo // ignore: cast_nullable_to_non_nullable
+              as Tipo,
       observaciones: freezed == observaciones
           ? _value.observaciones
           : observaciones // ignore: cast_nullable_to_non_nullable
@@ -204,11 +230,13 @@ class __$$DispositivoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
   const _$DispositivoImpl(
-      {required this.nombre,
+      {required this.idInventario,
+      required this.nombre,
       required this.etiqueta,
-      required this.codigo,
+      required this.numInventario,
       required this.enUso,
       required this.estatus,
+      required this.tipo,
       required this.observaciones,
       required this.ip,
       required this.sucursal});
@@ -217,15 +245,19 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
       _$$DispositivoImplFromJson(json);
 
   @override
+  final String? idInventario;
+  @override
   final String? nombre;
   @override
   final String? etiqueta;
   @override
-  final String? codigo;
+  final int numInventario;
   @override
   final bool? enUso;
   @override
-  final String? estatus;
+  final Estatus estatus;
+  @override
+  final Tipo tipo;
   @override
   final String? observaciones;
   @override
@@ -235,7 +267,7 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Dispositivo(nombre: $nombre, etiqueta: $etiqueta, codigo: $codigo, enUso: $enUso, estatus: $estatus, observaciones: $observaciones, ip: $ip, sucursal: $sucursal)';
+    return 'Dispositivo(idInventario: $idInventario, nombre: $nombre, etiqueta: $etiqueta, numInventario: $numInventario, enUso: $enUso, estatus: $estatus, tipo: $tipo, observaciones: $observaciones, ip: $ip, sucursal: $sucursal)';
   }
 
   @override
@@ -243,11 +275,13 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Dispositivo'))
+      ..add(DiagnosticsProperty('idInventario', idInventario))
       ..add(DiagnosticsProperty('nombre', nombre))
       ..add(DiagnosticsProperty('etiqueta', etiqueta))
-      ..add(DiagnosticsProperty('codigo', codigo))
+      ..add(DiagnosticsProperty('numInventario', numInventario))
       ..add(DiagnosticsProperty('enUso', enUso))
       ..add(DiagnosticsProperty('estatus', estatus))
+      ..add(DiagnosticsProperty('tipo', tipo))
       ..add(DiagnosticsProperty('observaciones', observaciones))
       ..add(DiagnosticsProperty('ip', ip))
       ..add(DiagnosticsProperty('sucursal', sucursal));
@@ -258,12 +292,16 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DispositivoImpl &&
+            (identical(other.idInventario, idInventario) ||
+                other.idInventario == idInventario) &&
             (identical(other.nombre, nombre) || other.nombre == nombre) &&
             (identical(other.etiqueta, etiqueta) ||
                 other.etiqueta == etiqueta) &&
-            (identical(other.codigo, codigo) || other.codigo == codigo) &&
+            (identical(other.numInventario, numInventario) ||
+                other.numInventario == numInventario) &&
             (identical(other.enUso, enUso) || other.enUso == enUso) &&
             (identical(other.estatus, estatus) || other.estatus == estatus) &&
+            (identical(other.tipo, tipo) || other.tipo == tipo) &&
             (identical(other.observaciones, observaciones) ||
                 other.observaciones == observaciones) &&
             (identical(other.ip, ip) || other.ip == ip) &&
@@ -273,8 +311,8 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, nombre, etiqueta, codigo, enUso,
-      estatus, observaciones, ip, sucursal);
+  int get hashCode => Object.hash(runtimeType, idInventario, nombre, etiqueta,
+      numInventario, enUso, estatus, tipo, observaciones, ip, sucursal);
 
   @JsonKey(ignore: true)
   @override
@@ -288,15 +326,25 @@ class _$DispositivoImpl with DiagnosticableTreeMixin implements _Dispositivo {
       this,
     );
   }
+
+  @override
+  String toStringFormateada() {
+    return
+      "Nombre: $nombre \n"
+      "Etiqueta: $etiqueta \n"
+      "Estatus: ${estatus.nombre}";
+  }
 }
 
 abstract class _Dispositivo implements Dispositivo {
   const factory _Dispositivo(
-      {required final String? nombre,
+      {required final String? idInventario,
+      required final String? nombre,
       required final String? etiqueta,
-      required final String? codigo,
+      required final int numInventario,
       required final bool? enUso,
-      required final String? estatus,
+      required final Estatus estatus,
+      required final Tipo tipo,
       required final String? observaciones,
       required final String? ip,
       required final Sucursal sucursal}) = _$DispositivoImpl;
@@ -305,15 +353,19 @@ abstract class _Dispositivo implements Dispositivo {
       _$DispositivoImpl.fromJson;
 
   @override
+  String? get idInventario;
+  @override
   String? get nombre;
   @override
   String? get etiqueta;
   @override
-  String? get codigo;
+  int get numInventario;
   @override
   bool? get enUso;
   @override
-  String? get estatus;
+  Estatus get estatus;
+  @override
+  Tipo get tipo;
   @override
   String? get observaciones;
   @override

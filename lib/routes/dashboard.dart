@@ -1,6 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:avatar_hover/avatar_hover.dart';
-import 'package:binding_prueba/data_sources/bh_provider.dart';
+import 'package:binding_prueba/data_sources/bh_controller.dart';
 import 'package:binding_prueba/data_sources/dispositivos_data_source.dart';
+import 'package:binding_prueba/utils/tabla_controller.dart';
+import 'package:flutter/foundation.dart';
+import 'package:syncfusion_flutter_datagrid_export/export.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
+import 'package:binding_prueba/models/estatus.dart';
 import 'package:binding_prueba/models/sucursal_model/sucursal.dart';
 import 'package:binding_prueba/widgets/barra_herramientas.dart';
 import 'package:binding_prueba/widgets/tarjeta_info.dart';
@@ -8,6 +16,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:file_saver/file_saver_web.dart';
+import 'package:file_saver/file_saver.dart';
 
 import '../widgets/menu_contextual.dart';
 
@@ -40,25 +50,27 @@ class StateDashboard extends State<Dashboard> {
     300,
   ];
   final DispositivosDataSource dispositivosDataSource = DispositivosDataSource();
-  DataGridController controller = DataGridController();
+  final ControlTablaDashboard controlTabla = ControlTablaDashboard();
   final GlobalKey llave = GlobalKey();
-  Map<String, dynamic> infoCelda = {};
+  final GlobalKey<SfDataGridState> _llaveTabla = GlobalKey<SfDataGridState>();
+  String infoCelda = "";
 
   @override
   void initState() {
     super.initState();
-    dispositivosDataSource.sort();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(dispositivosDataSource.listaDispositivos.length);
-          print(dispositivosDataSource.filas.length);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Visibility(
+        visible: kDebugMode,
+        child: FloatingActionButton(
+          onPressed: () {
+            print(dispositivosDataSource.cargando.toString());
+          },
+          child: Icon(Icons.add),
+        ),
       ),
       appBar: AppBar(
         title: const Text("Dashboard"),
@@ -72,7 +84,7 @@ class StateDashboard extends State<Dashboard> {
             statusHeight: 0,
             height: 50,
             width: 45,
-            avatarChild: const NetworkImage("https://marketplace.canva.com/EAFYecj_1Sc/1/0/1600w/canva-cream-and-black-simple-elegant-catering-food-logo-2LPev1tJbrg.jpg"),
+            avatarChild: const NetworkImage("https://avatars.githubusercontent.com/u/62195353?v=4"),
           ),
         ],
       ),
@@ -89,13 +101,25 @@ class StateDashboard extends State<Dashboard> {
                     dispositivosDataSource.makeRows();
                   },
                   filtrosCallback: (v) {
-                    dispositivosDataSource.filtrarEstatus(v.estatus.toString());
+                    dispositivosDataSource.filtrarEstatus(v.estatus!.nombre);
                   },
                   busquedaCallback: (v, s) {
-
+                    //dispositivosDataSource.busquedaDispositivos();
                   },
-                  fechaCallback: (v) {},
+                  // fechaCallback: (v) {
+                  //
+                  // },
                   widgetsExtra: [
+                    SizedBox(
+                      child: IconButton(
+                        tooltip: "Exportar tabla",
+                        icon: const Icon(Icons.file_download_rounded),
+                        onPressed: () {
+                          exportarExcel();
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
                     SizedBox(
                       width: 200,
                       child: Padding(
@@ -108,6 +132,44 @@ class StateDashboard extends State<Dashboard> {
                             context.read<BDHProvider>().updateFiltroActivo(true);
                             dispositivosDataSource.filtrarDispositivos(i);
                           },
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: "Sucursal",
+                              prefixIcon: const Icon(
+                                  Icons.store_mall_directory_outlined
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              labelStyle: const TextStyle(
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.error,
+                                  width: 1.5,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -128,8 +190,9 @@ class StateDashboard extends State<Dashboard> {
                       height: MediaQuery.of(context).size.height - 122,
                       child: Card(
                         child: SfDataGrid(
+                          key: _llaveTabla,
                           rowsPerPage: 30,
-                          controller: controller,
+                          controller: controlTabla,
                           isScrollbarAlwaysShown: true,
                           highlightRowOnHover: true,
                           headerGridLinesVisibility: GridLinesVisibility.none,
@@ -142,7 +205,7 @@ class StateDashboard extends State<Dashboard> {
                           onCellTap: (DataGridCellTapDetails v) {
                             var numero = v.rowColumnIndex.rowIndex - 1;
                             setState(() {
-                              infoCelda = dispositivosDataSource.obtenerInfoFila(dispositivosDataSource.filas[numero].getCells());
+                              infoCelda = DispositivosDataSource.listaDispositivos[numero].toStringFormateada();
                             });
                           },
                           onColumnResizeUpdate: (v) {
@@ -221,10 +284,7 @@ class StateDashboard extends State<Dashboard> {
                     child: TarjetaInfo(
                       icono: Icons.info_outline,
                       titulo: "Información de dispositivo",
-                      subtitulo: "${infoCelda.keys.toList()[0]} - ${infoCelda.values.toList()[0]} \n"
-                          "${infoCelda.keys.toList()[1]} - ${infoCelda.values.toList()[1]} \n"
-                          "${infoCelda.keys.toList()[2]} - ${infoCelda.values.toList()[2]} \n"
-                          "${infoCelda.keys.toList()[3]} - ${infoCelda.values.toList()[3]} \n",
+                      subtitulo: infoCelda,
                       altura: MediaQuery.of(context).size.height,
                       ancho: 500,
                     ),
@@ -236,5 +296,18 @@ class StateDashboard extends State<Dashboard> {
         ],
       ),
     );
+  }
+
+  Future exportarExcel() async {
+    final xlsio.Workbook wb = _llaveTabla.currentState!.exportToExcelWorkbook();
+    final List<int> bytes = wb.saveAsStream();
+    Uint8List bytesUint = Uint8List.fromList(bytes);
+    await FileSaver.instance.saveFile(
+      name: 'Datos Dashboard',
+      bytes: bytesUint,
+      mimeType: MimeType.microsoftExcel,
+      ext: 'xlsx',
+    );
+    wb.dispose();
   }
 }

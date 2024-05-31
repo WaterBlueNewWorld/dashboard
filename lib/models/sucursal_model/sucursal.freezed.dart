@@ -143,7 +143,9 @@ class _$SucursalImpl with DiagnosticableTreeMixin implements _Sucursal {
   }
 
   @override
-  bool isEqual(Sucursal model) => model.nombre == nombre;
+  bool isEqual(Sucursal model) {
+    return model.nombre == nombre;
+  }
 }
 
 abstract class _Sucursal implements Sucursal {

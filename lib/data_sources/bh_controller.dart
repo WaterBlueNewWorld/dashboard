@@ -21,7 +21,7 @@ class BDHProvider extends ChangeNotifier {
   late DateTime _fechaFinalSeleccion;
 
   Estatus? _estatusAnterior;
-  Estatus? estatus = Estatus.bueno;
+  Estatus? estatus = Estatus.na;
 
   bool get filtroActivo => _filtroActivo;
   // Se le agrega las horas y fechas de las 11:59:59.99 para que tome
@@ -76,7 +76,7 @@ class BDHProvider extends ChangeNotifier {
     _fechaInicialSeleccion = _fechaInicial;
     _fechaFinalSeleccion = _fechaFinal;
     _filtroActivo = false;
-    estatus = null;
+    estatus = Estatus.na;
     notifyListeners();
   }
 
