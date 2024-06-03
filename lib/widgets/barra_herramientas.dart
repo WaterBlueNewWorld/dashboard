@@ -85,6 +85,8 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                       controller: controlBusqueda,
                                       onChanged: (v) {},
                                       onSubmitted: (v) {
+                                        dynamic opc = opciones;
+                                        opc.updateFiltroActivo(true);
                                         widget.busquedaCallback!(opciones, v);
                                       },
                                       showCursor: true,
@@ -93,7 +95,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                         prefixIcon: const Icon(
                                             Icons.search
                                         ),
-                                        suffixIcon: widget.borrarBusquedaCallback != null && controlBusqueda.text != ""
+                                        suffixIcon: controlBusqueda.text != ""
                                             ? IconButton(
                                           onPressed: () {
                                             setState(() {

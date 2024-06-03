@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:avatar_hover/avatar_hover.dart';
-import 'package:binding_prueba/data_sources/bh_controller.dart';
-import 'package:binding_prueba/data_sources/dispositivos_data_source.dart';
-import 'package:binding_prueba/utils/tabla_controller.dart';
+import 'package:dashboard/data_sources/bh_controller.dart';
+import 'package:dashboard/data_sources/dispositivos_data_source.dart';
+import 'package:dashboard/utils/tabla_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'package:binding_prueba/models/estatus.dart';
-import 'package:binding_prueba/models/sucursal_model/sucursal.dart';
-import 'package:binding_prueba/widgets/barra_herramientas.dart';
-import 'package:binding_prueba/widgets/tarjeta_info.dart';
+import 'package:dashboard/models/estatus.dart';
+import 'package:dashboard/models/sucursal_model/sucursal.dart';
+import 'package:dashboard/widgets/barra_herramientas.dart';
+import 'package:dashboard/widgets/tarjeta_info.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,8 @@ import 'package:file_saver/file_saver.dart';
 import '../widgets/menu_contextual.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  const Dashboard({super.key, required this.dispositivosDataSource});
+  final DispositivosDataSource dispositivosDataSource;
 
   @override
   State<Dashboard> createState() => StateDashboard();
@@ -36,18 +37,17 @@ class StateDashboard extends State<Dashboard> {
   final List<String> columnas = [
     "Nombre",
     "Etiqueta",
-    "Sucursal",
+    //"Sucursal",
     "Estatus",
     "Código Dispositivo",
   ];
   List<double> anchoColumnas = [
     200,
     300,
-    300,
+    //300,
     200,
     300,
   ];
-  final DispositivosDataSource dispositivosDataSource = DispositivosDataSource();
   final ControlTablaDashboard controlTabla = ControlTablaDashboard();
   final GlobalKey llave = GlobalKey();
   final GlobalKey<SfDataGridState> _llaveTabla = GlobalKey<SfDataGridState>();
@@ -65,7 +65,7 @@ class StateDashboard extends State<Dashboard> {
         visible: kDebugMode,
         child: FloatingActionButton(
           onPressed: () {
-            print(dispositivosDataSource.cargando.toString());
+            print(widget.dispositivosDataSource.cargando.toString());
           },
           child: Icon(Icons.add),
         ),
@@ -96,17 +96,17 @@ class StateDashboard extends State<Dashboard> {
               Flexible(
                 child: BarraHerramientas<BDHProvider>(
                   actualizarCallback: (v, b){
-                    dispositivosDataSource.makeRows();
+                    widget.dispositivosDataSource.makeRows();
                   },
                   filtrosCallback: (v) {
-                    dispositivosDataSource.filtrarEstatus(v.estatus!.nombre);
+                    widget.dispositivosDataSource.filtrarEstatus(v.estatus!.nombre);
                   },
                   busquedaCallback: (v, s) {
-                    //dispositivosDataSource.busquedaDispositivos();
+                    widget.dispositivosDataSource.busquedaDispositivos(s);
                   },
-                  // fechaCallback: (v) {
-                  //
-                  // },
+                  fechaCallback: (v) {
+
+                  },
                   widgetsExtra: [
                     SizedBox(
                       child: IconButton(
@@ -123,12 +123,12 @@ class StateDashboard extends State<Dashboard> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: DropdownSearch<Sucursal>(
-                          items: dispositivosDataSource.sucursales,
+                          items: widget.dispositivosDataSource.sucursales,
                           compareFn: (x, y) => x.isEqual(y),
                           itemAsString: (i) => i.nombre!,
                           onChanged: (Sucursal? i) {
                             context.read<BDHProvider>().updateFiltroActivo(true);
-                            dispositivosDataSource.filtrarDispositivos(i);
+                            widget.dispositivosDataSource.filtrarDispositivos(i);
                           },
                           dropdownDecoratorProps: DropDownDecoratorProps(
                             dropdownSearchDecoration: InputDecoration(
@@ -198,7 +198,7 @@ class StateDashboard extends State<Dashboard> {
                                     isScrollbarAlwaysShown: true,
                                     highlightRowOnHover: true,
                                     headerGridLinesVisibility: GridLinesVisibility.none,
-                                    source: dispositivosDataSource,
+                                    source: widget.dispositivosDataSource,
                                     columnWidthMode: ColumnWidthMode.fill,
                                     columnResizeMode: ColumnResizeMode.onResize,
                                     allowSorting: true,
@@ -209,7 +209,7 @@ class StateDashboard extends State<Dashboard> {
                                     onCellTap: (DataGridCellTapDetails v) {
                                       var numero = v.rowColumnIndex.rowIndex - 1;
                                       setState(() {
-                                        infoCelda = dispositivosDataSource.listaDispositivos[numero].toStringFormateada();
+                                        infoCelda = DispositivosDataSource.dispositivos.dispositivos[numero].toStringFormateada();
                                       });
                                     },
                                     onColumnResizeUpdate: (v) {
@@ -220,14 +220,14 @@ class StateDashboard extends State<Dashboard> {
                                         if (v.column.columnName == "Etiqueta") {
                                           anchoColumnas[1] = v.width;
                                         }
-                                        if (v.column.columnName == "Sucursal") {
+                                        // if (v.column.columnName == "Sucursal") {
+                                        //   anchoColumnas[2] = v.width;
+                                        // }
+                                        if (v.column.columnName == "Estatus") {
                                           anchoColumnas[2] = v.width;
                                         }
-                                        if (v.column.columnName == "Estatus") {
-                                          anchoColumnas[3] = v.width;
-                                        }
                                         if (v.column.columnName == "Código Dispositivo") {
-                                          anchoColumnas[4] = v.width;
+                                          anchoColumnas[3] = v.width;
                                         }
                                       });
                                       return true;
@@ -283,7 +283,7 @@ class StateDashboard extends State<Dashboard> {
                                 Flexible(
                                   flex: 0,
                                   child: SfDataPager(
-                                    delegate: dispositivosDataSource,
+                                    delegate: widget.dispositivosDataSource,
                                     pageCount: 20,
                                     direction: Axis.horizontal,
                                   ),

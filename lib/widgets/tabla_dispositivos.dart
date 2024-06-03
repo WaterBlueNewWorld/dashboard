@@ -1,4 +1,4 @@
-import 'package:binding_prueba/data_sources/dispositivos_data_source.dart';
+import 'package:dashboard/data_sources/dispositivos_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 

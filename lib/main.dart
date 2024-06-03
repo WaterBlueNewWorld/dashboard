@@ -1,16 +1,17 @@
-import 'package:binding_prueba/data_sources/bh_controller.dart';
-import 'package:binding_prueba/routes/dashboard.dart';
-import 'package:binding_prueba/utils/tabla_controller.dart';
+import 'package:dashboard/data_sources/bh_controller.dart';
+import 'package:dashboard/data_sources/dispositivos_data_source.dart';
+import 'package:dashboard/routes/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const DemoDashboard());
+  runApp(DemoDashboard());
 }
 
 class DemoDashboard extends StatelessWidget {
-  const DemoDashboard({super.key});
+  DemoDashboard({super.key});
+  final DispositivosDataSource _dispositivosDataSource = DispositivosDataSource();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class DemoDashboard extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => BDHProvider()),
         ],
         builder: (c, f) {
-          return const Portal(child: Dashboard());
+          return Portal(child: Dashboard(dispositivosDataSource: _dispositivosDataSource,));
         } ,
       ),
     );
