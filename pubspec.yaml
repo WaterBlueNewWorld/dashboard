@@ -16,7 +16,7 @@ dependencies:
   provider: ^6.1.2
   syncfusion_flutter_datepicker: ^25.2.6
   flutter_portal: ^1.1.4
-  file_saver: ^0.2.13
+#  file_saver: ^0.2.13
   dio: ^5.4.3+1
   avatar_hover:
     git: https://github.com/WaterBlueNewWorld/avatar_hover

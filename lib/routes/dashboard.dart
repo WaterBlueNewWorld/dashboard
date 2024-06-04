@@ -7,7 +7,7 @@ import 'package:dashboard/utils/tabla_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'package:dashboard/models/estatus.dart';
+// import 'package:dashboard/models/estatus.dart';
 import 'package:dashboard/models/sucursal_model/sucursal.dart';
 import 'package:dashboard/widgets/barra_herramientas.dart';
 import 'package:dashboard/widgets/tarjeta_info.dart';
@@ -15,7 +15,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:file_saver/file_saver.dart';
+// import 'package:file_saver/file_saver.dart';
 
 import '../widgets/menu_contextual.dart';
 
@@ -65,7 +65,9 @@ class StateDashboard extends State<Dashboard> {
         visible: kDebugMode,
         child: FloatingActionButton(
           onPressed: () {
-            print(widget.dispositivosDataSource.cargando.toString());
+            if (kDebugMode) {
+              print(widget.dispositivosDataSource.cargando.toString());
+            }
           },
           child: Icon(Icons.add),
         ),
@@ -95,23 +97,29 @@ class StateDashboard extends State<Dashboard> {
               const SizedBox(height: 65,),
               Flexible(
                 child: BarraHerramientas<BDHProvider>(
-                  actualizarCallback: (v, b){
+                  actualizarCallback: (p, b){
                     widget.dispositivosDataSource.makeRows();
                   },
-                  filtrosCallback: (v) {
-                    widget.dispositivosDataSource.filtrarEstatus(v.estatus!.nombre);
+                  filtrosCallback: (p) {
+                    widget.dispositivosDataSource.filtrarEstatus(p.estatus!);
                   },
-                  busquedaCallback: (v, s) {
+                  busquedaCallback: (p, s) {
                     widget.dispositivosDataSource.busquedaDispositivos(s);
                   },
-                  fechaCallback: (v) {
-
+                  borrarBusquedaCallback: (p) {
+                    p.valoresDefault();
+                    widget.dispositivosDataSource.makeRows();
                   },
+                  // fechaCallback: (v) {
+                  //
+                  // },
                   widgetsExtra: [
                     SizedBox(
                       child: IconButton(
                         tooltip: "Exportar tabla",
                         icon: const Icon(Icons.file_download_rounded),
+                        isSelected: true,
+                        iconSize: 29,
                         onPressed: () {
                           exportarExcel();
                         },
@@ -206,10 +214,16 @@ class StateDashboard extends State<Dashboard> {
                                     allowColumnsResizing: true,
                                     navigationMode: GridNavigationMode.row,
                                     allowColumnsDragging: true,
+                                    onFilterChanged: (f) {
+                                      print(f.filterConditions.toString());
+                                    },
                                     onCellTap: (DataGridCellTapDetails v) {
                                       var numero = v.rowColumnIndex.rowIndex - 1;
+                                      if (numero < 0) {
+                                        return;
+                                      }
                                       setState(() {
-                                        infoCelda = DispositivosDataSource.dispositivos.dispositivos[numero].toStringFormateada();
+                                        infoCelda = widget.dispositivosDataSource.obtenerInfoFila(numero);
                                       });
                                     },
                                     onColumnResizeUpdate: (v) {
@@ -284,8 +298,19 @@ class StateDashboard extends State<Dashboard> {
                                   flex: 0,
                                   child: SfDataPager(
                                     delegate: widget.dispositivosDataSource,
-                                    pageCount: 20,
+                                    pageCount: (1926 / widget.dispositivosDataSource.filasPorPagina) + 1,
+                                    visibleItemsCount: widget.dispositivosDataSource.filasPorPagina,
                                     direction: Axis.horizontal,
+                                    availableRowsPerPage: const [200, 400, 800],
+                                    onRowsPerPageChanged: (v) {
+                                      setState(() {
+                                        widget.dispositivosDataSource.filasPorPagina = v!;
+                                        widget.dispositivosDataSource.makeRows();
+                                      });
+                                      if (kDebugMode) {
+                                        print(widget.dispositivosDataSource.filasPorPagina);
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -316,15 +341,15 @@ class StateDashboard extends State<Dashboard> {
   }
 
   Future exportarExcel() async {
-    final xlsio.Workbook wb = _llaveTabla.currentState!.exportToExcelWorkbook();
-    final List<int> bytes = wb.saveAsStream();
-    Uint8List bytesUint = Uint8List.fromList(bytes);
-    await FileSaver.instance.saveFile(
-      name: 'Datos Dashboard',
-      bytes: bytesUint,
-      mimeType: MimeType.microsoftExcel,
-      ext: 'xlsx',
-    );
-    wb.dispose();
+    // final xlsio.Workbook wb = _llaveTabla.currentState!.exportToExcelWorkbook();
+    // final List<int> bytes = wb.saveAsStream();
+    // Uint8List bytesUint = Uint8List.fromList(bytes);
+    // await FileSaver.instance.saveFile(
+    //   name: 'Datos Dashboard',
+    //   bytes: bytesUint,
+    //   mimeType: MimeType.microsoftExcel,
+    //   ext: 'xlsx',
+    // );
+    // wb.dispose();
   }
 }

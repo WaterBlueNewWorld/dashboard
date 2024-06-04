@@ -1,18 +1,16 @@
 import 'package:dashboard/models/dispositivo_model/dispositivo.dart';
 import 'package:dashboard/models/sucursal_model/sucursal.dart';
 import 'package:dashboard/utils/solicitudes_api.dart';
-import 'package:dio/dio.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../models/estatus.dart';
 
 class DispositivosDataSource extends DataGridSource {
   final Faker faker = Faker(seed: 453233);
 
-  int filasPorPagina = 20;
-  int offset = 200;
+  int filasPorPagina = 200;
+  int offset = 0;
   bool cargando = true;
 
   List<DataGridRow> filas = [];
@@ -29,22 +27,28 @@ class DispositivosDataSource extends DataGridSource {
       notifyListeners();
     }).catchError((s) {
       notifyListeners();
-      print(s);
       throw Exception(s.toString());
     });
   }
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) {
-    print(newPageIndex);
-    print(oldPageIndex);
-    if (newPageIndex != 0 || newPageIndex > 0) {
-      offset = (newPageIndex * oldPageIndex).floor();
+    if (newPageIndex > oldPageIndex) {
+      offset = (filasPorPagina * newPageIndex).floor();
+      makeRows();
       notifyListeners();
       return Future<bool>.value(true);
-    }
-    if (newPageIndex == 0 || newPageIndex < 0) {
-      Future<bool>.value(false);
+    } else if (newPageIndex < oldPageIndex) {
+      if (newPageIndex == 0) {
+        offset = 0;
+        makeRows();
+        notifyListeners();
+      } else {
+        offset = (filasPorPagina * newPageIndex).floor();
+        makeRows();
+        notifyListeners();
+      }
+      return Future<bool>.value(true);
     }
     return Future<bool>.value(false);
   }
@@ -57,10 +61,13 @@ class DispositivosDataSource extends DataGridSource {
       dispositivos = await SolicitudesApi(
         url: "http://localhost:3000/api/dispositivos",
       ).obtenerDispositivos(
-        maxFilas: 20,
+        maxFilas: filasPorPagina,
         fechaInicial: '',
         fechaFinal: '',
-      );
+        offset: offset == 0 ? null : offset
+      ).then((e) {
+        return Future.value(e);
+      });
     } catch (ex) {
       throw Exception(ex.toString());
     }
@@ -96,8 +103,43 @@ class DispositivosDataSource extends DataGridSource {
     notifyListeners();
   }
 
+  @override
+  int compare(DataGridRow? a, DataGridRow? b, SortColumnDetails sortColumn) {
+    if (sortColumn.sortDirection == DataGridSortDirection.ascending) {
+      filas.sort((a, b) {
+        String aNombre = a
+            .getCells()
+            .firstWhere((element) => element.columnName == sortColumn.name)
+            .value
+            .toString();
+        String bNombre = b
+            .getCells()
+            .firstWhere((element) => element.columnName == sortColumn.name)
+            .value
+            .toString();
+        return aNombre.compareTo(bNombre);
+      });
+    }
+    if (sortColumn.sortDirection == DataGridSortDirection.descending) {
+      filas.sort((a, b) {
+        String aNombre = b
+            .getCells()
+            .firstWhere((element) => element.columnName == sortColumn.name)
+            .value
+            .toString();
+        String bNombre = a
+            .getCells()
+            .firstWhere((element) => element.columnName == sortColumn.name)
+            .value
+            .toString();
+        return aNombre.compareTo(bNombre);
+      });
+    }
+    return super.compare(a, b, sortColumn);
+  }
+
   void filtrarDispositivos(Sucursal? sucursal) {
-    // var listaSort = listaDispositivos.dispositivos.where((test) {
+    // var listaSort = dispositivos.dispositivos.where((test) {
     //   if (sucursal?.nombre != null) {
     //     return test.sucursal.nombre == sucursal?.nombre;
     //   } else {
@@ -107,22 +149,32 @@ class DispositivosDataSource extends DataGridSource {
     // makeRowsSort(listaSort);
   }
 
-  void filtrarEstatus(String estatus) {
-    // var listaFiltrada = listaDispositivos.dispositivos.where((test) {
-    //   return test.estatus.nombre == estatus;
-    // }).toList();
-    // makeRowsSort(listaFiltrada);
+  void filtrarEstatus(String? estatus) {
+    if (estatus != null) {
+      var listaFiltrada = dispositivos.dispositivos.where((test) {
+        return test.estatus == estatus;
+      }).toList();
+      makeRowsSort(listaFiltrada);
+    } else {
+      makeRows();
+    }
   }
 
   void busquedaDispositivos(String query) {
     var lista = dispositivos.dispositivos.where((e) {
-      return e.toStringFormateada().contains(query);
+      return e.toStringFormateada().toLowerCase().contains(query);
     }).toList();
     makeRowsSort(lista);
   }
 
   String obtenerInfoFila(int numero) {
-    return dispositivos.dispositivos[numero].toStringFormateada();
+    var info = filas[numero].getCells();
+    String infoString = "";
+    info.forEach((a) {
+      infoString += "${a.columnName}: ${a.value} \n";
+    });
+
+    return infoString;
   }
 
   @override

@@ -1,11 +1,11 @@
-import 'package:dashboard/models/estatus.dart';
-import 'package:dashboard/models/sucursal_model/sucursal.dart';
+// import 'package:dashboard/models/estatus.dart';
+// import 'package:dashboard/models/sucursal_model/sucursal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
-
-import '../estatus.dart';
-import '../sucursal_model/sucursal.dart';
-import '../tipo.dart';
+//
+// import '../estatus.dart';
+// import '../sucursal_model/sucursal.dart';
+// import '../tipo.dart';
 part 'dispositivo.freezed.dart';
 part 'dispositivo.g.dart';
 
@@ -26,7 +26,7 @@ class Dispositivo with _$Dispositivo {
     required String? nombre,
     required String? etiqueta,
     required String? enUso,
-    required String? sucursal,
+    //required String? sucursal,
     required String? tipo,
     required String? estatus,
     required String? observaciones,

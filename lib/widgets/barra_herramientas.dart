@@ -138,7 +138,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                           ),
                           Visibility(
                             visible: widget.busquedaCallback != null,
-                            child: const SizedBox(width: 20,),
+                            child: const SizedBox(width: 15,),
                           ),
                           Visibility(
                             visible: widget.filtrosCallback != null,
@@ -174,10 +174,10 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       leading: Consumer<T>(
                                                         builder: (context, opciones, child) {
                                                           dynamic opc = opciones;
-                                                          return Radio<Estatus>(
-                                                            value: Estatus.activo,
+                                                          return Radio<String?>(
+                                                            value: "A",
                                                             groupValue: opc.estatus,
-                                                            onChanged: (Estatus? v) {
+                                                            onChanged: (String? v) {
                                                               dynamic valorRadio = context.read<T>();
                                                               valorRadio.updateEstatus(v!);
                                                               if (kDebugMode) {
@@ -189,9 +189,9 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       ),
                                                       onTap: () {
                                                         dynamic valorRadio = context.read<T>();
-                                                        valorRadio.updateEstatus(Estatus.activo);
+                                                        valorRadio.updateEstatus("A");
                                                         if (kDebugMode) {
-                                                          print("Situacion: ${valorRadio.estatus}");
+                                                          print("Estatus: ${valorRadio.estatus}");
                                                         }
                                                       },
                                                     ),
@@ -200,10 +200,10 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       leading: Consumer<T>(
                                                         builder: (context, opciones, child) {
                                                           dynamic opc = opciones;
-                                                          return Radio<Estatus>(
+                                                          return Radio<String?>(
                                                             groupValue: opc.estatus,
-                                                            value: Estatus.procesado,
-                                                            onChanged: (Estatus? v) {
+                                                            value: "P",
+                                                            onChanged: (String? v) {
                                                               dynamic valorRadio = context.read<T>();
                                                               valorRadio?.updateEstatus(v!);
                                                               if (kDebugMode) {
@@ -215,9 +215,9 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       ),
                                                       onTap: () {
                                                         dynamic valorRadio = context.read<T>();
-                                                        valorRadio.updateEstatus(Estatus.procesado);
+                                                        valorRadio.updateEstatus("P");
                                                         if (kDebugMode) {
-                                                          print("Situacion: ${valorRadio.estatus}");
+                                                          print("Estatus: ${valorRadio.estatus}");
                                                         }
                                                       },
                                                     ),
@@ -226,10 +226,10 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       leading: Consumer<T>(
                                                         builder: (context, opciones, child) {
                                                           dynamic opc = opciones;
-                                                          return Radio<Estatus>(
+                                                          return Radio<String?>(
                                                             groupValue: opc.estatus,
-                                                            value: Estatus.cancelado,
-                                                            onChanged: (Estatus? v) {
+                                                            value: "X",
+                                                            onChanged: (String? v) {
                                                               dynamic valorRadio = context.read<T>();
                                                               valorRadio.updateEstatus(v!);
                                                               if (kDebugMode) {
@@ -241,9 +241,9 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       ),
                                                       onTap: () {
                                                         dynamic valorRadio = context.read<T>();
-                                                        valorRadio.updateEstatus(Estatus.cancelado);
+                                                        valorRadio.updateEstatus("X");
                                                         if (kDebugMode) {
-                                                          print("Situacion: ${valorRadio.estatus}");
+                                                          print("Estatus: ${valorRadio.estatus}");
                                                         }
                                                       },
                                                     ),
@@ -294,7 +294,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                                                       fixedSize: const Size(215, 70),
                                                     ),
                                                     onPressed: () {
-                                                      opc.updateEstatusAnterior(Estatus.na);
+                                                      opc.updateEstatusAnterior("A");
                                                       opc.updateFiltroActivo(true);
                                                       widget.filtrosCallback!(opciones);
                                                       setState(() {
@@ -315,6 +315,8 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                               ),
                               child: IconButton(
                                 tooltip: "Filtros",
+                                isSelected: true,
+                                iconSize: 29,
                                 onPressed: () {
                                   setState(() {
                                     visibleFiltros = !visibleFiltros;
@@ -425,6 +427,8 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                               builder: (context, opciones, child) {
                                 return IconButton(
                                   tooltip: "Actualizar",
+                                  isSelected: true,
+                                  iconSize: 29,
                                   onPressed: () {
                                     widget.actualizarCallback!(opciones, true);
                                   },
@@ -444,6 +448,7 @@ class BarraHerramientasState<T> extends State<BarraHerramientas<T>> {
                           ),
                         ],
                       ),
+                      const SizedBox(width: 35,),
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Consumer<T>(

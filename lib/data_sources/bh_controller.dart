@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/estatus.dart';
-
 class BDHProvider extends ChangeNotifier {
   bool _filtroActivo = false;
   final DateTime _fechaInicial = DateTime.utc(
@@ -20,8 +18,8 @@ class BDHProvider extends ChangeNotifier {
   late DateTime _fechaInicialSeleccion;
   late DateTime _fechaFinalSeleccion;
 
-  Estatus? _estatusAnterior;
-  Estatus? estatus = Estatus.na;
+  String? _estatusAnterior = "A";
+  String? estatus = "A";
 
   bool get filtroActivo => _filtroActivo;
   // Se le agrega las horas y fechas de las 11:59:59.99 para que tome
@@ -35,7 +33,7 @@ class BDHProvider extends ChangeNotifier {
       milliseconds: 999,
     ),
   );
-  Estatus? get estatusAnterior => _estatusAnterior;
+  String? get estatusAnterior => _estatusAnterior;
 
   DateTime get fechaInicialSeleccion => _fechaInicialSeleccion;
   DateTime get fechaFinalSeleccion => _fechaFinalSeleccion.add(
@@ -62,12 +60,12 @@ class BDHProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateEstatus(Estatus newEstatus) {
+  void updateEstatus(String newEstatus) {
     estatus = newEstatus;
     notifyListeners();
   }
 
-  void updateEstatusAnterior(Estatus newEstatus) {
+  void updateEstatusAnterior(String newEstatus) {
     _estatusAnterior = newEstatus;
     notifyListeners();
   }
@@ -76,7 +74,7 @@ class BDHProvider extends ChangeNotifier {
     _fechaInicialSeleccion = _fechaInicial;
     _fechaFinalSeleccion = _fechaFinal;
     _filtroActivo = false;
-    estatus = Estatus.na;
+    estatus = null;
     notifyListeners();
   }
 
