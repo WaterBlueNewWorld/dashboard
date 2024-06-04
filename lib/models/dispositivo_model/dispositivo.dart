@@ -21,14 +21,14 @@ class Dispositivos with _$Dispositivos {
 @freezed
 class Dispositivo with _$Dispositivo {
   const factory Dispositivo({
-    required String? idInventario,
+    required String idInventario,
     required int numInventario,
     required String? nombre,
     required String? etiqueta,
     required String? enUso,
-    //required Sucursal sucursal,
-    required String tipo,
-    required String estatus,
+    required String? sucursal,
+    required String? tipo,
+    required String? estatus,
     required String? observaciones,
 
     /// TODO: por que no aparece en la db
